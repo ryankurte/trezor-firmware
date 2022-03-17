@@ -53,12 +53,6 @@ TXHASH_65b768 = bytes.fromhex(
 TXHASH_a345b8 = bytes.fromhex(
     "a345b85759b385c6446055e4c3baa77e8161a65009dc009489b48aa6587ce348"
 )
-TXHASH_3ac32e = bytes.fromhex(
-    "3ac32e90831d79385eee49d6030a2123cd9d009fe8ffc3d470af9a6a777a119b"
-)
-TXHASH_df862e = bytes.fromhex(
-    "df862e31da31ff84addd392f6aa89af18978a398ea258e4901ae72894b66679f"
-)
 TXHASH_afde2d = bytes.fromhex(
     "afde2d41702948e922150825742cda3294d80d43b8e508865c1e2d648f6d4dae"
 )
@@ -73,6 +67,9 @@ TXHASH_ec16dc = bytes.fromhex(
 )
 TXHASH_20912f = bytes.fromhex(
     "20912f98ea3ed849042efed0fdac8cb4fc301961c5988cba56902d8ffb61c337"
+)
+TXHASH_1010b2 = bytes.fromhex(
+    "1010b25957a30110377a33bd3b0bd39045b3cc488d0e534d1ea5ec238812c0fc"
 )
 
 
@@ -464,38 +461,37 @@ def test_p2wsh_external_presigned(client: Client):
 @pytest.mark.skip_t1
 def test_p2tr_external_presigned(client: Client):
     inp1 = messages.TxInputType(
-        # tb1pswrqtykue8r89t9u4rprjs0gt4qzkdfuursfnvqaa3f2yql07zmq8s8a5u
-        address_n=parse_path("m/86h/1h/0h/0/0"),
-        amount=6_800,
-        prev_hash=TXHASH_df862e,
-        prev_index=0,
+        # tb1p8tvmvsvhsee73rhym86wt435qrqm92psfsyhy6a3n5gw455znnpqm8wald
+        address_n=parse_path("m/86h/1h/0h/0/1"),
+        amount=13_000,
+        prev_hash=TXHASH_1010b2,
+        prev_index=1,
         script_type=messages.InputScriptType.SPENDTAPROOT,
     )
     inp2 = messages.TxInputType(
-        # tb1p8tvmvsvhsee73rhym86wt435qrqm92psfsyhy6a3n5gw455znnpqm8wald
-        # m/86'/1'/0'/0/1 for "all all ... all" seed.
-        amount=13_000,
-        prev_hash=TXHASH_3ac32e,
-        prev_index=1,
+        # tb1pswrqtykue8r89t9u4rprjs0gt4qzkdfuursfnvqaa3f2yql07zmq8s8a5u
+        # m/86h/1h/0h/0/0
+        amount=6_800,
+        prev_hash=TXHASH_1010b2,
+        prev_index=0,
         script_pubkey=bytes.fromhex(
-            "51203ad9b641978673e88ee4d9f4e5d63400c1b2a8304c09726bb19d10ead2829cc2"
+            "512083860592dcc9c672acbca8c23941e85d402b353ce0e099b01dec52a203eff0b6"
         ),
         script_type=messages.InputScriptType.EXTERNAL,
         witness=bytearray.fromhex(
-            "01409956e47403278bf76eecbbbc3af0c2731d8347763825248a2e0f39aca5a684a7d5054e7222a1033fb5864a886180f1a8c64adab12433c78298d1f83e4c8f46e1"
+            "0140e241b85650814f35a6a8fe277d8cd784e897b7f032b73cc2f5326dac5991e8f43d54861d624cc119f5409c7d0def65a613691dc17a3700bbc8639a1c8a3184f0"
         ),
     )
     out1 = messages.TxOutputType(
-        # 84'/1'/1'/0/0
-        address="tb1q7r9yvcdgcl6wmtta58yxf29a8kc96jkyxl7y88",
+        address="tb1qq0rurzt04d76hk7pjxhqggk7ad4zj7c9u369kt",
         amount=15_000,
         script_type=messages.OutputScriptType.PAYTOADDRESS,
     )
     out2 = messages.TxOutputType(
         # tb1pn2d0yjeedavnkd8z8lhm566p0f2utm3lgvxrsdehnl94y34txmts5s7t4c
         address_n=parse_path("m/86h/1h/0h/1/0"),
+        amount=4_600,
         script_type=messages.OutputScriptType.PAYTOTAPROOT,
-        amount=6_800 + 13_000 - 200 - 15_000,
     )
     with client:
         client.set_expected_responses(
@@ -520,11 +516,10 @@ def test_p2tr_external_presigned(client: Client):
             client, "Testnet", [inp1, inp2], [out1, out2], prev_txes=TX_CACHE_TESTNET
         )
 
-    # TODO: fails with CHECK_ON_CHAIN=1 - tx_hex is different
     assert_tx_matches(
         serialized_tx,
-        hash_link="https://tbtc1.trezor.io/api/tx/7956f1de3e7362b04115b64a31f0b6822c50dd6c08d78398f392a0ac3f0e357b",
-        tx_hex="010000000001029f67664b8972ae01498e25ea98a37889f19aa86a2f39ddad84ff31da312e86df0000000000ffffffff9b117a776a9aaf70d4c3ffe89f009dcd23210a03d649ee5e38791d83902ec33a0100000000ffffffff02983a000000000000160014f0ca4661a8c7f4edad7da1c864a8bd3db05d4ac4f8110000000000002251209a9af24b396f593b34e23fefba6b417a55c5ee3f430c3837379fcb5246ab36d70140496fddbbddff45c7006d56c96fc9f2d6b5c785d7ca8f09230b944e2d2f07452610191bdbc3d6f625d5a0a0b04e49d85427df8a5bb033b3156541abef66e66aba01409956e47403278bf76eecbbbc3af0c2731d8347763825248a2e0f39aca5a684a7d5054e7222a1033fb5864a886180f1a8c64adab12433c78298d1f83e4c8f46e100000000",
+        hash_link="https://tbtc1.trezor.io/api/tx/22dee49480bd5a6ee49bdf2dd0c06b49187990bc9a90b2b5f2cdc3567b71690c",
+        tx_hex="01000000000102fcc0128823eca51e4d530e8d48ccb34590d30b3bbd337a371001a35759b210100100000000fffffffffcc0128823eca51e4d530e8d48ccb34590d30b3bbd337a371001a35759b210100000000000ffffffff02983a00000000000016001403c7c1896fab7dabdbc191ae0422deeb6a297b05f8110000000000002251209a9af24b396f593b34e23fefba6b417a55c5ee3f430c3837379fcb5246ab36d701405c014bd3cdc94fb1a2d4ead3509fbed1ad3065ad931ea1e998ed29f73212a2506f2ac39a526c237bbf22af75afec64bb9b484b040c72016e30b1337a6274a9ae0140e241b85650814f35a6a8fe277d8cd784e897b7f032b73cc2f5326dac5991e8f43d54861d624cc119f5409c7d0def65a613691dc17a3700bbc8639a1c8a3184f000000000",
     )
 
     # Test corrupted signature in witness.

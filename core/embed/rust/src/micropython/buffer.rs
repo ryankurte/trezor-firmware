@@ -147,7 +147,7 @@ impl TryFrom<Obj> for StrBuffer {
     type Error = Error;
 
     fn try_from(obj: Obj) -> Result<Self, Self::Error> {
-        if unsafe { ffi::mp_type_str.is_type_of(obj) } {
+        if obj.is_qstr() || unsafe { ffi::mp_type_str.is_type_of(obj) } {
             Ok(Self(Buffer::try_from(obj)?))
         } else {
             Err(Error::TypeError)

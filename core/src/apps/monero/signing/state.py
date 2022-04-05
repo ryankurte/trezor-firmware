@@ -8,7 +8,7 @@ from apps.monero.xmr import crypto
 
 if TYPE_CHECKING:
     from trezor.wire import Context
-    from apps.monero.xmr.crypto import Ge25519, Sc25519
+    from apps.monero.xmr.crypto import Point, Scalar
     from apps.monero.xmr.credentials import AccountCreds
 
     Subaddresses = dict[bytes, tuple[int, int]]
@@ -51,8 +51,8 @@ class State:
         - for subaddresses the `r` is commonly denoted as `s`, however it is still just a random number
         - the keys are used to derive the one time address and its keys (P = H(A*r)*G + B)
         """
-        self.tx_priv: Sc25519 = None
-        self.tx_pub: Ge25519 = None
+        self.tx_priv: Scalar = None
+        self.tx_pub: Point = None
 
         """
         In some cases when subaddresses are used we need more tx_keys
@@ -77,7 +77,7 @@ class State:
         self.account_idx = 0
 
         # contains additional tx keys if need_additional_tx_keys is True
-        self.additional_tx_private_keys: list[Sc25519] = []
+        self.additional_tx_private_keys: list[Scalar] = []
         self.additional_tx_public_keys: list[bytes] = []
 
         # currently processed input/output index
@@ -96,7 +96,7 @@ class State:
 
         self.output_amounts: list[int] = []
         # output *range proof* masks. HP10+ makes them deterministic.
-        self.output_masks: list[Sc25519] = []
+        self.output_masks: list[Scalar] = []
 
         # the range proofs are calculated in batches, this denotes the grouping
         self.rsig_grouping: list[int] = []
@@ -104,9 +104,9 @@ class State:
         self.rsig_offload = False
 
         # sum of all inputs' pseudo out masks
-        self.sumpouts_alphas: Sc25519 = crypto.sc_0()
+        self.sumpouts_alphas: Scalar = crypto.sc_0()
         # sum of all output' pseudo out masks
-        self.sumout: Sc25519 = crypto.sc_0()
+        self.sumout: Scalar = crypto.sc_0()
 
         self.subaddresses: Subaddresses = {}
 

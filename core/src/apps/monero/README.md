@@ -259,8 +259,8 @@ Few notes on design / implementation.
 Operation with Ed25519 points and scalars are implemented in [trezor-crypto] so the underlying cryptography layer
 is fast, secure and constant-time.
 
-Ed Point coordinates are Extended Edwards, using type `ge25519` with coordinates `(x, y, z, t)`. Functions in Monero code
-in the [trezor-crypto] use the `ge25519` for points (no other different point formats).
+Ed Point coordinates are Extended Edwards, using type `Point` with coordinates `(x, y, z, t)`. Functions in Monero code
+in the [trezor-crypto] use the `Point` for points (no other different point formats).
 
 Functions like `op256_modm` (e.g., `add256_modm`) operate on scalar values, i.e., 256 bit integers modulo curve order
 `2**252 + 3*610042537739*15158679415041928064055629`.

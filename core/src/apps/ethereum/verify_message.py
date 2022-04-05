@@ -18,6 +18,8 @@ if TYPE_CHECKING:
 
 async def verify_message(ctx: Context, msg: EthereumVerifyMessage) -> Success:
     digest = message_digest(msg.message)
+    from binascii import hexlify
+    print(hexlify(digest))
     if len(msg.signature) != 65:
         raise wire.DataError("Invalid signature")
     sig = bytearray([msg.signature[64]]) + msg.signature[:64]

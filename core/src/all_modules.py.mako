@@ -29,9 +29,12 @@ ALTCOINS = (
     "tezos",
     "webauthn",
     "zcash",
+    "mobilecoin",
 )
 
 pyfiles = chain.from_iterable(sorted(SRCDIR.glob(p)) for p in PATTERNS)
+
+print("{}".format(list(pyfiles)))
 
 def make_import_name(pyfile):
     importfile = pyfile.relative_to(SRCDIR)

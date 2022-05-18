@@ -18,6 +18,10 @@ mod trezorhal;
 pub mod ui;
 mod util;
 
+// TODO(@ryankurte): make dalek_crypto inclusion optional
+//#[cfg(feature="dalek_crypto")]
+use dalek_donna::*;
+
 #[cfg(not(test))]
 #[cfg(not(feature = "test"))]
 #[panic_handler]

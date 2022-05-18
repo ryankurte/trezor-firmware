@@ -13,6 +13,8 @@ model_t1 = []
 model_tr = []
 ui = []
 ui_debug = []
+# TODO: opt-in feature to provide dalek crypto APIs
+#dalek_crypto = [ "dalek-donna" ]
 test = ["cc", "glob"]
 
 [lib]
@@ -42,6 +44,12 @@ default_features = false
 
 [dependencies.cstr_core]
 version = "0.2.4"
+default_features = false
+
+[dependencies.dalek-donna]
+path = "../../../../rust-dalek-donna"
+#optional = true
+features = [ "u32_backend" ]
 default_features = false
 
 # Build dependencies

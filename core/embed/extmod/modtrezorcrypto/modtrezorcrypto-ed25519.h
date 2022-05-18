@@ -55,7 +55,7 @@ STATIC mp_obj_t mod_trezorcrypto_ed25519_publickey(mp_obj_t secret_key) {
   }
   vstr_t pk = {0};
   vstr_init_len(&pk, sizeof(ed25519_public_key));
-  ed25519_publickey(*(const ed25519_secret_key *)sk.buf,
+  dalek_ed25519_publickey(*(const ed25519_secret_key *)sk.buf,
                     *(ed25519_public_key *)pk.buf);
   return mp_obj_new_str_from_vstr(&mp_type_bytes, &pk);
 }
@@ -94,8 +94,8 @@ STATIC mp_obj_t mod_trezorcrypto_ed25519_sign(size_t n_args,
       mp_raise_ValueError("Unknown hash function");
     }
   } else {
-    ed25519_publickey(*(const ed25519_secret_key *)sk.buf, pk);
-    ed25519_sign(msg.buf, msg.len, *(const ed25519_secret_key *)sk.buf, pk,
+    dalek_ed25519_publickey(*(const ed25519_secret_key *)sk.buf, pk);
+    dalek_ed25519_sign(msg.buf, msg.len, *(const ed25519_secret_key *)sk.buf, pk,
                  *(ed25519_signature *)sig.buf);
   }
 
@@ -165,7 +165,7 @@ STATIC mp_obj_t mod_trezorcrypto_ed25519_verify(mp_obj_t public_key,
   if (msg.len == 0) {
     return mp_const_false;
   }
-  return (0 == ed25519_sign_open(msg.buf, msg.len,
+  return (0 == dalek_ed25519_sign_open(msg.buf, msg.len,
                                  *(const ed25519_public_key *)pk.buf,
                                  *(const ed25519_signature *)sig.buf))
              ? mp_const_true
@@ -173,6 +173,8 @@ STATIC mp_obj_t mod_trezorcrypto_ed25519_verify(mp_obj_t public_key,
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_3(mod_trezorcrypto_ed25519_verify_obj,
                                  mod_trezorcrypto_ed25519_verify);
+
+#ifdef USE_COSI
 
 /// def cosi_combine_publickeys(public_keys: list[bytes]) -> bytes:
 ///     """
@@ -291,6 +293,8 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(
     mod_trezorcrypto_ed25519_cosi_sign_obj, 5, 5,
     mod_trezorcrypto_ed25519_cosi_sign);
 
+#endif
+
 STATIC const mp_rom_map_elem_t mod_trezorcrypto_ed25519_globals_table[] = {
     {MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_ed25519)},
     {MP_ROM_QSTR(MP_QSTR_generate_secret),
@@ -304,12 +308,14 @@ STATIC const mp_rom_map_elem_t mod_trezorcrypto_ed25519_globals_table[] = {
 #endif
     {MP_ROM_QSTR(MP_QSTR_verify),
      MP_ROM_PTR(&mod_trezorcrypto_ed25519_verify_obj)},
+#ifdef USE_COSI
     {MP_ROM_QSTR(MP_QSTR_cosi_combine_publickeys),
      MP_ROM_PTR(&mod_trezorcrypto_ed25519_cosi_combine_publickeys_obj)},
     {MP_ROM_QSTR(MP_QSTR_cosi_combine_signatures),
      MP_ROM_PTR(&mod_trezorcrypto_ed25519_cosi_combine_signatures_obj)},
     {MP_ROM_QSTR(MP_QSTR_cosi_sign),
      MP_ROM_PTR(&mod_trezorcrypto_ed25519_cosi_sign_obj)},
+#endif
 };
 STATIC MP_DEFINE_CONST_DICT(mod_trezorcrypto_ed25519_globals,
                             mod_trezorcrypto_ed25519_globals_table);

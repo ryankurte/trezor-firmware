@@ -130,11 +130,11 @@ STATIC mp_obj_t mod_trezorcrypto_ed25519_sign_ext(mp_obj_t secret_key,
   }
   ed25519_public_key pk = {0};
 
-  ed25519_publickey_ext(*(const ed25519_secret_key *)sk.buf,
+  dalek_ed25519_publickey_ext(*(const ed25519_secret_key *)sk.buf,
                         *(const ed25519_secret_key *)skext.buf, pk);
   vstr_t sig = {0};
   vstr_init_len(&sig, sizeof(ed25519_signature));
-  ed25519_sign_ext(msg.buf, msg.len, *(const ed25519_secret_key *)sk.buf,
+  dalek_ed25519_sign_ext(msg.buf, msg.len, *(const ed25519_secret_key *)sk.buf,
                    *(const ed25519_secret_key *)skext.buf, pk,
                    *(ed25519_signature *)sig.buf);
   return mp_obj_new_str_from_vstr(&mp_type_bytes, &sig);

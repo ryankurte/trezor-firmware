@@ -77,7 +77,7 @@ SOURCE_MOD += [
     'vendor/trezor-crypto/ed25519-donna/curve25519-donna-32bit.c',
     'vendor/trezor-crypto/ed25519-donna/curve25519-donna-helpers.c',
     'vendor/trezor-crypto/ed25519-donna/curve25519-donna-scalarmult-base.c',
-    'vendor/trezor-crypto/ed25519-donna/ed25519.c',
+#    'vendor/trezor-crypto/ed25519-donna/ed25519.c',
     'vendor/trezor-crypto/ed25519-donna/ed25519-donna-32bit-tables.c',
     'vendor/trezor-crypto/ed25519-donna/ed25519-donna-basepoint-table.c',
     'vendor/trezor-crypto/ed25519-donna/ed25519-donna-impl-base.c',

@@ -23,6 +23,7 @@ crate-type = ["staticlib"]
 [profile.dev]
 panic = "abort"
 split-debuginfo = "unpacked"
+codegen-units = 1
 
 [profile.release]
 panic = "abort"
@@ -46,7 +47,12 @@ default_features = false
 version = "0.2.4"
 default_features = false
 
-[dependencies.dalek-donna]
+[dependencies.getrandom]
+version = "0.2.6"
+default_features = false
+features = [ "custom" ]
+
+[dependencies.dalek-donna-ffi]
 path = "../../../../rust-dalek-donna"
 #optional = true
 features = [ "u32_backend" ]

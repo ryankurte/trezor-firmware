@@ -55,7 +55,7 @@ STATIC mp_obj_t mod_trezorcrypto_curve25519_publickey(mp_obj_t secret_key) {
   }
   vstr_t pk = {0};
   vstr_init_len(&pk, 32);
-  curve25519_scalarmult_basepoint((uint8_t *)pk.buf, (const uint8_t *)sk.buf);
+  dalek_curved25519_scalarmult_basepoint((uint8_t *)pk.buf, (const uint8_t *)sk.buf);
   return mp_obj_new_str_from_vstr(&mp_type_bytes, &pk);
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_1(mod_trezorcrypto_curve25519_publickey_obj,
@@ -79,7 +79,7 @@ STATIC mp_obj_t mod_trezorcrypto_curve25519_multiply(mp_obj_t secret_key,
   }
   vstr_t out = {0};
   vstr_init_len(&out, 32);
-  curve25519_scalarmult((uint8_t *)out.buf, (const uint8_t *)sk.buf,
+  dalek_curve25519_scalarmult((uint8_t *)out.buf, (const uint8_t *)sk.buf,
                         (const uint8_t *)pk.buf);
   return mp_obj_new_str_from_vstr(&mp_type_bytes, &out);
 }

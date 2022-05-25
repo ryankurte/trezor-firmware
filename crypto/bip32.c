@@ -479,7 +479,7 @@ int hdnode_fill_public_key(HDNode *node) {
   } else {
     node->public_key[0] = 1;
     if (node->curve == &ed25519_info) {
-      ed25519_publickey(node->private_key, node->public_key + 1);
+      dalek_ed25519_publickey(node->private_key, node->public_key + 1);
     } else if (node->curve == &ed25519_sha3_info) {
       ed25519_publickey_sha3(node->private_key, node->public_key + 1);
 #if USE_KECCAK
@@ -487,10 +487,10 @@ int hdnode_fill_public_key(HDNode *node) {
       ed25519_publickey_keccak(node->private_key, node->public_key + 1);
 #endif
     } else if (node->curve == &curve25519_info) {
-      curve25519_scalarmult_basepoint(node->public_key + 1, node->private_key);
+      dalek_curved25519_scalarmult_basepoint(node->public_key + 1, node->private_key);
 #if USE_CARDANO
     } else if (node->curve == &ed25519_cardano_info) {
-      ed25519_publickey_ext(node->private_key, node->private_key_extension,
+      dalek_ed25519_publickey_ext(node->private_key, node->private_key_extension,
                             node->public_key + 1);
 #endif
     }
@@ -649,7 +649,7 @@ int hdnode_sign(HDNode *node, const uint8_t *msg, uint32_t msg_len,
       if (hdnode_fill_public_key(node) != 0) {
         return 1;
       }
-      ed25519_sign(msg, msg_len, node->private_key, node->public_key + 1, sig);
+      dalek_ed25519_sign(msg, msg_len, node->private_key, node->public_key + 1, sig);
     } else if (node->curve == &ed25519_sha3_info) {
       if (hdnode_fill_public_key(node) != 0) {
         return 1;
@@ -699,7 +699,7 @@ int hdnode_get_shared_key(const HDNode *node, const uint8_t *peer_public_key,
     if (peer_public_key[0] != 0x40) {
       return 1;  // Curve25519 public key should start with 0x40 byte.
     }
-    curve25519_scalarmult(session_key + 1, node->private_key,
+    dalek_curve25519_scalarmult(session_key + 1, node->private_key,
                           peer_public_key + 1);
     *result_size = 33;
     return 0;

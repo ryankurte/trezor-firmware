@@ -186,17 +186,20 @@ dependencies = [
 ]
 
 [[package]]
-name = "dalek-donna"
+name = "dalek-donna-ffi"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "bindgen",
  "cc",
  "cty",
+ "curve25519-dalek",
  "ed25519-dalek",
  "getrandom",
  "glob",
  "sha2 0.10.2",
+ "static_assertions",
+ "x25519-dalek",
 ]
 
 [[package]]
@@ -505,6 +508,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
 
 [[package]]
+name = "static_assertions"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
+
+[[package]]
 name = "strsim"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -565,7 +574,8 @@ dependencies = [
  "cc",
  "cstr_core",
  "cty",
- "dalek-donna",
+ "dalek-donna-ffi",
+ "getrandom",
  "glob",
  "heapless",
 ]
@@ -647,6 +657,17 @@ name = "winapi-x86_64-pc-windows-gnu"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
+
+[[package]]
+name = "x25519-dalek"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2392b6b94a576b4e2bf3c5b2757d63f10ada8020a2e4d08ac849ebcf6ea8e077"
+dependencies = [
+ "curve25519-dalek",
+ "rand_core",
+ "zeroize",
+]
 
 [[package]]
 name = "zeroize"

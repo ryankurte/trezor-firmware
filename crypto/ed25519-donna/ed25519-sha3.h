@@ -14,6 +14,12 @@ void ed25519_sign_sha3(const unsigned char *m, size_t mlen, const ed25519_secret
 
 int ed25519_scalarmult_sha3(ed25519_public_key res, const ed25519_secret_key sk, const ed25519_public_key pk);
 
+void dalek_ed25519_publickey_sha3(const ed25519_secret_key sk, ed25519_public_key pk);
+
+int dalek_ed25519_sign_open_sha3(const unsigned char *m, size_t mlen, const ed25519_public_key pk, const ed25519_signature RS);
+void dalek_ed25519_sign_sha3(const unsigned char *m, size_t mlen, const ed25519_secret_key sk, const ed25519_public_key pk, ed25519_signature RS);
+
+
 #if defined(__cplusplus)
 }
 #endif

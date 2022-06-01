@@ -205,7 +205,7 @@ size_t nem_transaction_end(nem_transaction_ctx *ctx,
                            const ed25519_secret_key private_key,
                            ed25519_signature signature) {
   if (private_key != NULL && signature != NULL) {
-    ed25519_sign_keccak(ctx->buffer, ctx->offset, private_key, ctx->public_key,
+    dalek_ed25519_sign_keccak(ctx->buffer, ctx->offset, private_key, ctx->public_key,
                         signature);
   }
 

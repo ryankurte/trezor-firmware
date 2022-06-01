@@ -18,9 +18,9 @@ mod trezorhal;
 pub mod ui;
 mod util;
 
-// TODO(@ryankurte): make dalek_crypto inclusion optional
-//#[cfg(feature="dalek_crypto")]
-use dalek_donna_ffi::*;
+// TODO(@ryankurte): make trezor_crypto_lib inclusion optional
+//#[cfg(feature="trezor_crypto_lib")]
+use trezor_crypto_lib::*;
 
 #[cfg(not(test))]
 #[cfg(not(feature = "test"))]

@@ -481,10 +481,10 @@ int hdnode_fill_public_key(HDNode *node) {
     if (node->curve == &ed25519_info) {
       dalek_ed25519_publickey(node->private_key, node->public_key + 1);
     } else if (node->curve == &ed25519_sha3_info) {
-      ed25519_publickey_sha3(node->private_key, node->public_key + 1);
+      dalek_ed25519_publickey_sha3(node->private_key, node->public_key + 1);
 #if USE_KECCAK
     } else if (node->curve == &ed25519_keccak_info) {
-      ed25519_publickey_keccak(node->private_key, node->public_key + 1);
+      dalek_ed25519_publickey_keccak(node->private_key, node->public_key + 1);
 #endif
     } else if (node->curve == &curve25519_info) {
       dalek_curved25519_scalarmult_basepoint(node->public_key + 1, node->private_key);
@@ -552,9 +552,7 @@ int hdnode_get_nem_shared_key(const HDNode *node,
   // sizeof(ed25519_public_key) == SHA3_256_DIGEST_LENGTH
   if (mul == NULL) mul = shared_key;
 
-  if (ed25519_scalarmult_keccak(mul, node->private_key, peer_public_key)) {
-    return 0;
-  }
+  dalek_curve25519_scalarmult(mul, node->private_key, peer_public_key);
 
   for (size_t i = 0; i < 32; i++) {
     shared_key[i] = mul[i] ^ salt[i];
@@ -654,14 +652,14 @@ int hdnode_sign(HDNode *node, const uint8_t *msg, uint32_t msg_len,
       if (hdnode_fill_public_key(node) != 0) {
         return 1;
       }
-      ed25519_sign_sha3(msg, msg_len, node->private_key, node->public_key + 1,
+      dalek_ed25519_sign_sha3(msg, msg_len, node->private_key, node->public_key + 1,
                         sig);
 #if USE_KECCAK
     } else if (node->curve == &ed25519_keccak_info) {
       if (hdnode_fill_public_key(node) != 0) {
         return 1;
       }
-      ed25519_sign_keccak(msg, msg_len, node->private_key, node->public_key + 1,
+      dalek_ed25519_sign_keccak(msg, msg_len, node->private_key, node->public_key + 1,
                           sig);
 #endif
     } else {

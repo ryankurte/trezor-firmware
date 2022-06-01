@@ -86,8 +86,8 @@ STATIC mp_obj_t mod_trezorcrypto_ed25519_sign(size_t n_args,
     mp_get_buffer_raise(args[2], &hash_func, MP_BUFFER_READ);
     // if hash_func == 'keccak':
     if (memcmp(hash_func.buf, "keccak", sizeof("keccak")) == 0) {
-      ed25519_publickey_keccak(*(const ed25519_secret_key *)sk.buf, pk);
-      ed25519_sign_keccak(msg.buf, msg.len, *(const ed25519_secret_key *)sk.buf,
+      dalek_ed25519_publickey_keccak(*(const ed25519_secret_key *)sk.buf, pk);
+      dalek_ed25519_sign_keccak(msg.buf, msg.len, *(const ed25519_secret_key *)sk.buf,
                           pk, *(ed25519_signature *)sig.buf);
     } else {
       vstr_clear(&sig);

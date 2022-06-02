@@ -45,7 +45,7 @@ CPPDEFINES_MOD += [
     ('USE_BIP32_CACHE', '0'),
     ('USE_KECCAK', '1'),
     ('USE_ETHEREUM', '1' if EVERYTHING else '0'),
-    ('USE_MONERO', '0' if EVERYTHING else '0'),
+    ('USE_MONERO', '1' if EVERYTHING else '0'),
     ('USE_CARDANO', '1' if EVERYTHING else '0'),
     ('USE_NEM', '1' if EVERYTHING else '0'),
     ('USE_EOS', '1' if EVERYTHING else '0'),
@@ -106,9 +106,9 @@ SOURCE_MOD += [
 if EVERYTHING:
     SOURCE_MOD += [
         'vendor/trezor-crypto/cardano.c',
-#        'vendor/trezor-crypto/monero/base58.c',
-#        'vendor/trezor-crypto/monero/serialize.c',
-#        'vendor/trezor-crypto/monero/xmr.c',
+        'vendor/trezor-crypto/monero/base58.c',
+        'vendor/trezor-crypto/monero/serialize.c',
+        'vendor/trezor-crypto/monero/xmr.c',
     ]
 
 # libsecp256k1-zkp
@@ -562,11 +562,11 @@ if FROZEN:
         exclude=[
             SOURCE_PY_DIR + 'trezor/enums/Binance*.py',
             SOURCE_PY_DIR + 'trezor/enums/Cardano*.py',
-#            SOURCE_PY_DIR + 'trezor/enums/DebugMonero*.py',
+            SOURCE_PY_DIR + 'trezor/enums/DebugMonero*.py',
             SOURCE_PY_DIR + 'trezor/enums/Eos*.py',
             SOURCE_PY_DIR + 'trezor/enums/Ethereum*.py',
             SOURCE_PY_DIR + 'trezor/enums/Monero*.py',
-#            SOURCE_PY_DIR + 'trezor/enums/NEM*.py',
+            SOURCE_PY_DIR + 'trezor/enums/NEM*.py',
             SOURCE_PY_DIR + 'trezor/enums/Ripple*.py',
             SOURCE_PY_DIR + 'trezor/enums/Stellar*.py',
             SOURCE_PY_DIR + 'trezor/enums/Tezos*.py',
@@ -609,11 +609,11 @@ if FROZEN:
         SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'apps/ethereum/*.py'))
         SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/enums/Ethereum*.py'))
 
-#        SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'apps/monero/*.py'))
-#        SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'apps/monero/*/*.py'))
-#        SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'apps/monero/*/*/*.py'))
-#        SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/enums/DebugMonero*.py'))
-#        SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/enums/Monero*.py'))
+        SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'apps/monero/*.py'))
+        SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'apps/monero/*/*.py'))
+        SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'apps/monero/*/*/*.py'))
+        SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/enums/DebugMonero*.py'))
+        SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/enums/Monero*.py'))
 
         SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'apps/nem/*.py'))
         SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'apps/nem/*/*.py'))

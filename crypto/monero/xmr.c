@@ -18,7 +18,7 @@ const ge25519 ALIGN(16) xmr_h = {
     {0x24517f7, 0x05ee936, 0x3acf5d9, 0x14b08aa, 0x3363738, 0x1051745,
      0x360601e, 0x0f3f2c9, 0x1ead2cd, 0x1d3e3df}};
 
-void ge25519_set_xmr_h(ge25519 *r) { ge25519_copy(r, &xmr_h); }
+void ge25519_set_xmr_h(ge25519 *r) { dalek_ge25519_copy(r, &xmr_h); }
 
 void xmr_random_scalar(bignum256modm m) {
   unsigned char buff[32] = {0};
@@ -51,18 +51,20 @@ void xmr_hash_to_scalar(bignum256modm r, const void *data, size_t length) {
 }
 
 void xmr_hash_to_ec(ge25519 *P, const void *data, size_t length) {
-  ge25519 point2 = {0};
+  ge25519 point2 = {0}; 
+
   uint8_t hash[HASHER_DIGEST_LENGTH] = {0};
   hasher_Raw(HASHER_SHA3K, data, length, hash);
 
-  ge25519_fromfe_frombytes_vartime(&point2, hash);
-  ge25519_mul8(P, &point2);
+  dalek_ge25519_fromfe_frombytes_vartime(&point2, hash);
+  
+  dalek_ge25519_mul8(P, &point2);
 }
 
 void xmr_derivation_to_scalar(bignum256modm s, const ge25519 *p,
                               uint32_t output_index) {
   uint8_t buff[32 + 8] = {0};
-  ge25519_pack(buff, p);
+  dalek_ge25519_pack(buff, p);
   int written = xmr_write_varint(buff + 32, 8, output_index);
   xmr_hash_to_scalar(s, buff, 32u + written);
 }
@@ -70,8 +72,8 @@ void xmr_derivation_to_scalar(bignum256modm s, const ge25519 *p,
 void xmr_generate_key_derivation(ge25519 *r, const ge25519 *A,
                                  const bignum256modm b) {
   ge25519 bA = {0};
-  ge25519_scalarmult(&bA, A, b);
-  ge25519_mul8(r, &bA);
+  dalek_ge25519_scalarmult(&bA, A, b);
+  dalek_ge25519_mul8(r, &bA);
 }
 
 void xmr_derive_private_key(bignum256modm s, const ge25519 *deriv, uint32_t idx,
@@ -86,38 +88,38 @@ void xmr_derive_public_key(ge25519 *r, const ge25519 *deriv, uint32_t idx,
   ge25519 p2 = {0};
 
   xmr_derivation_to_scalar(s, deriv, idx);
-  ge25519_scalarmult_base_wrapper(&p2, s);
-  ge25519_add(r, base, &p2, 0);
+  dalek_ge25519_scalarmult_base_wrapper(&p2, s);
+  dalek_ge25519_add(r, base, &p2, 0);
 }
 
 void xmr_add_keys2(ge25519 *r, const bignum256modm a, const bignum256modm b,
                    const ge25519 *B) {
   // aG + bB, G is basepoint
   ge25519 aG = {0}, bB = {0};
-  ge25519_scalarmult_base_wrapper(&aG, a);
-  ge25519_scalarmult(&bB, B, b);
-  ge25519_add(r, &aG, &bB, 0);
+  dalek_ge25519_scalarmult_base_wrapper(&aG, a);
+  dalek_ge25519_scalarmult(&bB, B, b);
+  dalek_ge25519_add(r, &aG, &bB, 0);
 }
 
 void xmr_add_keys2_vartime(ge25519 *r, const bignum256modm a,
                            const bignum256modm b, const ge25519 *B) {
   // aG + bB, G is basepoint
-  ge25519_double_scalarmult_vartime(r, B, b, a);
+  dalek_ge25519_double_scalarmult_vartime(r, B, b, a);
 }
 
 void xmr_add_keys3(ge25519 *r, const bignum256modm a, const ge25519 *A,
                    const bignum256modm b, const ge25519 *B) {
   // aA + bB
   ge25519 aA = {0}, bB = {0};
-  ge25519_scalarmult(&aA, A, a);
-  ge25519_scalarmult(&bB, B, b);
-  ge25519_add(r, &aA, &bB, 0);
+  dalek_ge25519_scalarmult(&aA, A, a);
+  dalek_ge25519_scalarmult(&bB, B, b);
+  dalek_ge25519_add(r, &aA, &bB, 0);
 }
 
 void xmr_add_keys3_vartime(ge25519 *r, const bignum256modm a, const ge25519 *A,
                            const bignum256modm b, const ge25519 *B) {
   // aA + bB
-  ge25519_double_scalarmult_vartime2(r, A, a, B, b);
+  dalek_ge25519_double_scalarmult_vartime2(r, A, a, B, b);
 }
 
 void xmr_get_subaddress_secret_key(bignum256modm r, uint32_t major,

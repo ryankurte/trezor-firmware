@@ -43,6 +43,8 @@ void curve25519_scalarmult(curve25519_key mypublic, const curve25519_key secret,
 
 void dalek_curve25519_scalarmult(curve25519_key mypublic, const curve25519_key secret, const curve25519_key basepoint);
 
+int dalek_curve25519_scalarmult_keccak(curve25519_key mypublic, const curve25519_key secret, const curve25519_key basepoint);
+
 void dalek_curved25519_scalarmult_basepoint(curve25519_key mypublic, const curve25519_key secret);
 
 #if !defined(__GNUC__) || __GNUC__ > 4

@@ -541,6 +541,7 @@ int hdnode_get_nem_address(HDNode *node, uint8_t version, char *address) {
   return nem_get_address(&node->public_key[1], version, address);
 }
 
+// TODO(@ryankurte): failing NEM tests share this
 int hdnode_get_nem_shared_key(const HDNode *node,
                               const ed25519_public_key peer_public_key,
                               const uint8_t *salt, ed25519_public_key mul,
@@ -552,7 +553,9 @@ int hdnode_get_nem_shared_key(const HDNode *node,
   // sizeof(ed25519_public_key) == SHA3_256_DIGEST_LENGTH
   if (mul == NULL) mul = shared_key;
 
-  dalek_curve25519_scalarmult(mul, node->private_key, peer_public_key);
+  if (dalek_curve25519_scalarmult_keccak(mul, node->private_key, peer_public_key)) {
+    return 0;
+  }
 
   for (size_t i = 0; i < 32; i++) {
     shared_key[i] = mul[i] ^ salt[i];

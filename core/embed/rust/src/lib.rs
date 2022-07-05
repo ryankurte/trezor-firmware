@@ -18,9 +18,8 @@ mod trezorhal;
 pub mod ui;
 mod util;
 
-// TODO(@ryankurte): make trezor_crypto_lib inclusion optional
-//#[cfg(feature="trezor_crypto_lib")]
-use trezor_crypto_lib::*;
+// Include trezor crypto library (implements `trezor-crypto(.*).h` functions)
+use {trezor_crypto_lib as _};
 
 #[cfg(not(test))]
 #[cfg(not(feature = "test"))]
@@ -43,9 +42,3 @@ fn panic(_info: &core::panic::PanicInfo) -> ! {
     trezorhal::common::fatal_error(empty, msg, empty, 0, empty);
 }
 
-
-pub fn rand(buf: &mut [u8]) -> Result<(), getrandom::Error> {
-    let code = core::num::NonZeroU32::new(1).unwrap();
-    Err(getrandom::Error::from(code))
-}
-getrandom::register_custom_getrandom!(rand);

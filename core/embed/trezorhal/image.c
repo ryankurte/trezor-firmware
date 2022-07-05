@@ -20,7 +20,7 @@
 #include <string.h>
 
 #include "blake2s.h"
-#include "ed25519-donna/ed25519.h"
+#include "trezor-crypto.h"
 
 #include "common.h"
 #include "flash.h"
@@ -47,7 +47,7 @@ static secbool compute_pubkey(uint8_t sig_m, uint8_t sig_n,
     }
   }
 
-  return sectrue * (0 == ed25519_cosi_combine_publickeys(res, keys, sig_m));
+  return sectrue * (0 == dalek_ed25519_cosi_combine_publickeys(res, keys, sig_m));
 }
 
 secbool load_image_header(const uint8_t *const data, const uint32_t magic,
@@ -95,7 +95,7 @@ secbool load_image_header(const uint8_t *const data, const uint32_t magic,
     return secfalse;
 
   return sectrue *
-         (0 == ed25519_sign_open(hdr->fingerprint, BLAKE2S_DIGEST_LENGTH, pub,
+         (0 == dalek_ed25519_sign_open(hdr->fingerprint, BLAKE2S_DIGEST_LENGTH, pub,
                                  *(const ed25519_signature *)hdr->sig));
 }
 
@@ -166,7 +166,7 @@ secbool load_vendor_header(const uint8_t *const data, uint8_t key_m,
     return secfalse;
 
   return sectrue *
-         (0 == ed25519_sign_open(hash, BLAKE2S_DIGEST_LENGTH, pub,
+         (0 == dalek_ed25519_sign_open(hash, BLAKE2S_DIGEST_LENGTH, pub,
                                  *(const ed25519_signature *)vhdr->sig));
 }
 

@@ -19,7 +19,7 @@
 
 #include "py/objstr.h"
 
-#include "ed25519-donna/ed25519.h"
+#include "trezor-crypto.h"
 
 #include "rand.h"
 

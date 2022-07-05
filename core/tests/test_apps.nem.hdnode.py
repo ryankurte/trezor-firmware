@@ -91,7 +91,6 @@ class TestNemHDNode(unittest.TestCase):
             # public key is prepended with 1, removing
             self.assertEqual(node.public_key()[1:], unhexlify(test[1]))
 
-    # TODO(@ryankurte): failing test
     def test_encryption(self):
         # test vectors from https://raw.githubusercontent.com/NemProject/nem-test-vectors/master/4.test-cipher.dat
         # private key, transfer public key, salt, iv, plain text, cipher text

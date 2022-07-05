@@ -33,16 +33,13 @@
 #include "cardano.h"
 #include "curves.h"
 #include "ecdsa.h"
-#include "ed25519-donna/ed25519-sha3.h"
-#include "ed25519-donna/ed25519.h"
+#include "trezor-crypto.h"
 #include "hmac.h"
 #include "nist256p1.h"
 #include "secp256k1.h"
 #include "sha2.h"
 #include "sha3.h"
-#if USE_KECCAK
-#include "ed25519-donna/ed25519-keccak.h"
-#endif
+
 #if USE_NEM
 #include "nem.h"
 #endif
@@ -553,7 +550,7 @@ int hdnode_get_nem_shared_key(const HDNode *node,
   // sizeof(ed25519_public_key) == SHA3_256_DIGEST_LENGTH
   if (mul == NULL) mul = shared_key;
 
-  if (dalek_curve25519_scalarmult_keccak(mul, node->private_key, peer_public_key)) {
+  if (dalek_ed25519_scalarmult_keccak(mul, node->private_key, peer_public_key)) {
     return 0;
   }
 

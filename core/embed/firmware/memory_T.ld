@@ -2,8 +2,11 @@
 
 ENTRY(reset_handler)
 
+/* bootloader takes first 256K starting at 0x08000000, see `core/embed/bootloader/memory.ld` */
 MEMORY {
+  /* application takes 768K up to 0x8100000, with signatures using the remaining 128K */
   FLASH  (rx)  : ORIGIN = 0x08040000, LENGTH = 768K
+  /* constants occupy 896K from 0x08120000 */
   FLASH2 (r)   : ORIGIN = 0x08120000, LENGTH = 896K
   CCMRAM (wal) : ORIGIN = 0x10000000, LENGTH = 64K
   SRAM   (wal) : ORIGIN = 0x20000000, LENGTH = 192K

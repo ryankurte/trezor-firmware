@@ -691,7 +691,6 @@ dependencies = [
 [[package]]
 name = "trezor-crypto-lib"
 version = "0.2.0"
-source = "git+https://github.com/mobilecoinofficial/rust-trezor-crypto#8ca8cff698be6a4f7600a9758e1f0d944e8f8c3d"
 dependencies = [
  "anyhow",
  "bindgen 0.59.2",

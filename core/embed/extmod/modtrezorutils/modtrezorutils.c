@@ -316,7 +316,33 @@ STATIC const mp_rom_map_elem_t mp_module_trezorutils_globals_table[] = {
 #else
     {MP_ROM_QSTR(MP_QSTR_BITCOIN_ONLY), mp_const_false},
 #endif
+    // Flags for each enabled coin type
+    {MP_ROM_QSTR(MP_QSTR_USE_MONERO),     USE_MONERO ? mp_const_true : mp_const_false},
+    {MP_ROM_QSTR(MP_QSTR_USE_CARDANO),    USE_CARDANO ? mp_const_true : mp_const_false},
+    {MP_ROM_QSTR(MP_QSTR_USE_BINANCE),    USE_BINANCE ? mp_const_true : mp_const_false},
+    {MP_ROM_QSTR(MP_QSTR_USE_EOS),        USE_EOS ? mp_const_true : mp_const_false},
+    {MP_ROM_QSTR(MP_QSTR_USE_ETHEREUM),   USE_ETHEREUM ? mp_const_true : mp_const_false},
+    {MP_ROM_QSTR(MP_QSTR_USE_NEM),        USE_NEM ? mp_const_true : mp_const_false},
+    {MP_ROM_QSTR(MP_QSTR_USE_MOBILECOIN), USE_MOBILECOIN ? mp_const_true : mp_const_false},
+    {MP_ROM_QSTR(MP_QSTR_USE_RIPPLE),     USE_RIPPLE ? mp_const_true : mp_const_false},
+    {MP_ROM_QSTR(MP_QSTR_USE_STELLAR),    USE_STELLAR ? mp_const_true : mp_const_false},
+    {MP_ROM_QSTR(MP_QSTR_USE_TEZOS),      USE_TEZOS ? mp_const_true : mp_const_false},
+    {MP_ROM_QSTR(MP_QSTR_USE_ZCASH),      USE_ZCASH ? mp_const_true : mp_const_false},
+    {MP_ROM_QSTR(MP_QSTR_USE_WEBAUTHN),   USE_WEBAUTHN ? mp_const_true : mp_const_false},
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 STATIC MP_DEFINE_CONST_DICT(mp_module_trezorutils_globals,
                             mp_module_trezorutils_globals_table);

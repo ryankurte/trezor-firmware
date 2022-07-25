@@ -257,6 +257,8 @@ class MessageType(IntEnum):
     WebAuthnCredentials = 801
     WebAuthnAddResidentCredential = 802
     WebAuthnRemoveResidentCredential = 803
+    MobilecoinGetSubaddress = 900
+    MobilecoinSubaddressKeys = 901
 
 
 class FailureType(IntEnum):
@@ -450,6 +452,7 @@ class Capability(IntEnum):
     Shamir = 15
     ShamirGroups = 16
     PassphraseEntry = 17
+    Mobilecoin = 18
 
 
 class SdProtectOperationType(IntEnum):
@@ -4855,6 +4858,216 @@ class EthereumAccessList(protobuf.MessageType):
     ) -> None:
         self.storage_keys: Sequence["bytes"] = storage_keys if storage_keys is not None else []
         self.address = address
+
+
+class MobilecoinGetSubaddress(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 900
+    FIELDS = {
+        1: protobuf.Field("wallet", "uint32", repeated=False, required=True),
+        2: protobuf.Field("index", "uint32", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        wallet: "int",
+        index: "int",
+    ) -> None:
+        self.wallet = wallet
+        self.index = index
+
+
+class MobilecoinSubaddressKeys(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 901
+    FIELDS = {
+        1: protobuf.Field("wallet", "uint32", repeated=False, required=True),
+        2: protobuf.Field("index", "uint32", repeated=False, required=True),
+        3: protobuf.Field("spend_public", "RistrettoPrivate", repeated=False, required=True),
+        4: protobuf.Field("view_private", "RistrettoPublic", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        wallet: "int",
+        index: "int",
+        spend_public: "RistrettoPrivate",
+        view_private: "RistrettoPublic",
+    ) -> None:
+        self.wallet = wallet
+        self.index = index
+        self.spend_public = spend_public
+        self.view_private = view_private
+
+
+class MobilecoinSignRequest(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = None
+    FIELDS = {
+        1: protobuf.Field("members", "MobilecoinReducedTxOut", repeated=True, required=False),
+        2: protobuf.Field("real_input_index", "uint32", repeated=False, required=True),
+        3: protobuf.Field("input_secret", "MobilecoinInputSecret", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        real_input_index: "int",
+        input_secret: "MobilecoinInputSecret",
+        members: Optional[Sequence["MobilecoinReducedTxOut"]] = None,
+    ) -> None:
+        self.members: Sequence["MobilecoinReducedTxOut"] = members if members is not None else []
+        self.real_input_index = real_input_index
+        self.input_secret = input_secret
+
+
+class MobilecoinSignResponse(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = None
+    FIELDS = {
+        1: protobuf.Field("public_key", "RistrettoPublic", repeated=False, required=True),
+        2: protobuf.Field("confirmation", "TxOutConfirmationNumber", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        public_key: "RistrettoPublic",
+        confirmation: "TxOutConfirmationNumber",
+    ) -> None:
+        self.public_key = public_key
+        self.confirmation = confirmation
+
+
+class MobileCoinGetKeyImage(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = None
+    FIELDS = {
+        1: protobuf.Field("wallet", "uint32", repeated=False, required=True),
+        2: protobuf.Field("index", "uint32", repeated=False, required=True),
+        3: protobuf.Field("tx_out_public_key", "RistrettoPoint", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        wallet: "int",
+        index: "int",
+        tx_out_public_key: "RistrettoPoint",
+    ) -> None:
+        self.wallet = wallet
+        self.index = index
+        self.tx_out_public_key = tx_out_public_key
+
+
+class MobilecoinKeyImage(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = None
+    FIELDS = {
+        1: protobuf.Field("key_image", "RistrettoPoint", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        key_image: "RistrettoPoint",
+    ) -> None:
+        self.key_image = key_image
+
+
+class RistrettoPublic(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = None
+    FIELDS = {
+        1: protobuf.Field("p", "bytes", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        p: "bytes",
+    ) -> None:
+        self.p = p
+
+
+class RistrettoPrivate(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = None
+    FIELDS = {
+        1: protobuf.Field("p", "bytes", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        p: "bytes",
+    ) -> None:
+        self.p = p
+
+
+class RistrettoPoint(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = None
+    FIELDS = {
+        1: protobuf.Field("p", "bytes", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        p: "bytes",
+    ) -> None:
+        self.p = p
+
+
+class TxOutConfirmationNumber(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = None
+    FIELDS = {
+        1: protobuf.Field("hash", "bytes", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        hash: "bytes",
+    ) -> None:
+        self.hash = hash
+
+
+class MobilecoinReducedTxOut(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = None
+    FIELDS = {
+        1: protobuf.Field("public_key", "RistrettoPublic", repeated=False, required=True),
+        2: protobuf.Field("target_key", "RistrettoPublic", repeated=False, required=True),
+        3: protobuf.Field("commitment", "RistrettoPoint", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        public_key: "RistrettoPublic",
+        target_key: "RistrettoPublic",
+        commitment: "RistrettoPoint",
+    ) -> None:
+        self.public_key = public_key
+        self.target_key = target_key
+        self.commitment = commitment
+
+
+class MobilecoinInputSecret(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = None
+    FIELDS = {
+        1: protobuf.Field("key", "RistrettoPrivate", repeated=False, required=False),
+        2: protobuf.Field("subaddress_index", "uint32", repeated=False, required=False),
+        3: protobuf.Field("amount", "uint64", repeated=False, required=True),
+        4: protobuf.Field("blinding", "RistrettoPoint", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        amount: "int",
+        blinding: "RistrettoPoint",
+        key: Optional["RistrettoPrivate"] = None,
+        subaddress_index: Optional["int"] = None,
+    ) -> None:
+        self.amount = amount
+        self.blinding = blinding
+        self.key = key
+        self.subaddress_index = subaddress_index
 
 
 class MoneroTransactionSourceEntry(protobuf.MessageType):

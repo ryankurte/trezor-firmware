@@ -1,0 +1,91 @@
+syntax = "proto2";
+package hw.trezor.messages.mobilecoin;
+
+// Mobilecoin messages for trezor HW wallet
+
+// Sugar for easier handling in Java
+option java_package = "com.satoshilabs.trezor.lib.protobuf";
+option java_outer_classname = "TrezorMessageBinance";
+
+import "messages-common.proto";
+
+// Request subaddress keys for a given wallet by index
+message MobilecoinGetSubaddress {
+    required uint32 wallet = 1;    // Wallet index (see SLIPxx)
+    required uint32 index = 2;     // Subadress index
+}
+
+// Response to GetSubaddress
+message MobilecoinSubaddressKeys {
+    required uint32 wallet = 1;    // Wallet index (see SLIPxx)
+    required uint32 index = 2;     // Subadress index
+
+    required RistrettoPrivate spend_public = 3;
+    required RistrettoPublic view_private = 4;
+}
+
+// Sign a ring
+message MobilecoinSignRequest {
+
+    /// TXOuts comprising ring
+    message MobilecoinReducedTxOut {
+        required RistrettoPublic public_key = 1;
+        required RistrettoPublic target_key = 2;
+        required RistrettoPoint  commitment = 3;
+    }
+
+    // Secret to sign
+    message MobilecoinInputSecret {
+        oneof ontime_key_derive {
+            RistrettoPrivate key = 1;
+            uint32 subaddress_index = 2;
+        }
+        required uint64 amount = 3;
+        required RistrettoPoint blinding = 4;
+    }
+
+    repeated MobilecoinReducedTxOut members = 1;        /// Ring members
+    required uint32 real_input_index = 2;               /// Index of real input in ring
+    required MobilecoinInputSecret input_secret = 3;    /// Secret for signing
+}
+
+// Signature response
+message MobilecoinSignResponse {
+    required RistrettoPublic public_key = 1;     // Public key of the TxOut.
+
+    required TxOutConfirmationNumber confirmation = 2;  // Confirmation number of the TxOut.
+}
+
+// Verify a key image
+message MobileCoinGetKeyImage {
+    required uint32 wallet = 1;    // Wallet index (see SLIPxx)
+    required uint32 index = 2;     // Subadress index
+
+    required RistrettoPoint tx_out_public_key = 3;
+}
+
+// 32-byte mobilecoin transaction key image
+message MobilecoinKeyImage {
+    required RistrettoPoint key_image = 1;
+}
+
+
+/// A ristretto public key
+message RistrettoPublic {
+    required bytes p = 1;
+}
+
+/// A ristretto private key
+message RistrettoPrivate {
+    required bytes p = 1;
+}
+
+/// 32-byte compressed Ristretto curve point
+message RistrettoPoint {
+    required bytes p = 1;
+}
+
+// A hash of the shared secret of a transaction output.
+message TxOutConfirmationNumber {
+    required bytes hash = 1;
+}

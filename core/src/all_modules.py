@@ -644,6 +644,12 @@ if utils.USE_MONERO:
     apps.monero.xmr.serialize_messages.tx_rsig_bulletproof
     import apps.monero.xmr.serialize_messages.tx_rsig_bulletproof
 
+if utils.USE_MOBILECOIN:
+    apps.mobilecoin
+    import apps.mobilecoin
+    apps.mobilecoin.get_address
+    import apps.mobilecoin.get_address
+
 if utils.USE_NEM:
     trezor.enums.NEMImportanceTransferMode
     import trezor.enums.NEMImportanceTransferMode

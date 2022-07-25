@@ -3666,6 +3666,202 @@ if TYPE_CHECKING:
         def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["EthereumAccessList"]:
             return isinstance(msg, cls)
 
+    class MobilecoinGetSubaddress(protobuf.MessageType):
+        wallet: "int"
+        index: "int"
+
+        def __init__(
+            self,
+            *,
+            wallet: "int",
+            index: "int",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["MobilecoinGetSubaddress"]:
+            return isinstance(msg, cls)
+
+    class MobilecoinSubaddressKeys(protobuf.MessageType):
+        wallet: "int"
+        index: "int"
+        spend_public: "RistrettoPrivate"
+        view_private: "RistrettoPublic"
+
+        def __init__(
+            self,
+            *,
+            wallet: "int",
+            index: "int",
+            spend_public: "RistrettoPrivate",
+            view_private: "RistrettoPublic",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["MobilecoinSubaddressKeys"]:
+            return isinstance(msg, cls)
+
+    class MobilecoinSignRequest(protobuf.MessageType):
+        members: "list[MobilecoinReducedTxOut]"
+        real_input_index: "int"
+        input_secret: "MobilecoinInputSecret"
+
+        def __init__(
+            self,
+            *,
+            real_input_index: "int",
+            input_secret: "MobilecoinInputSecret",
+            members: "list[MobilecoinReducedTxOut] | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["MobilecoinSignRequest"]:
+            return isinstance(msg, cls)
+
+    class MobilecoinSignResponse(protobuf.MessageType):
+        public_key: "RistrettoPublic"
+        confirmation: "TxOutConfirmationNumber"
+
+        def __init__(
+            self,
+            *,
+            public_key: "RistrettoPublic",
+            confirmation: "TxOutConfirmationNumber",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["MobilecoinSignResponse"]:
+            return isinstance(msg, cls)
+
+    class MobileCoinGetKeyImage(protobuf.MessageType):
+        wallet: "int"
+        index: "int"
+        tx_out_public_key: "RistrettoPoint"
+
+        def __init__(
+            self,
+            *,
+            wallet: "int",
+            index: "int",
+            tx_out_public_key: "RistrettoPoint",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["MobileCoinGetKeyImage"]:
+            return isinstance(msg, cls)
+
+    class MobilecoinKeyImage(protobuf.MessageType):
+        key_image: "RistrettoPoint"
+
+        def __init__(
+            self,
+            *,
+            key_image: "RistrettoPoint",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["MobilecoinKeyImage"]:
+            return isinstance(msg, cls)
+
+    class RistrettoPublic(protobuf.MessageType):
+        p: "bytes"
+
+        def __init__(
+            self,
+            *,
+            p: "bytes",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["RistrettoPublic"]:
+            return isinstance(msg, cls)
+
+    class RistrettoPrivate(protobuf.MessageType):
+        p: "bytes"
+
+        def __init__(
+            self,
+            *,
+            p: "bytes",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["RistrettoPrivate"]:
+            return isinstance(msg, cls)
+
+    class RistrettoPoint(protobuf.MessageType):
+        p: "bytes"
+
+        def __init__(
+            self,
+            *,
+            p: "bytes",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["RistrettoPoint"]:
+            return isinstance(msg, cls)
+
+    class TxOutConfirmationNumber(protobuf.MessageType):
+        hash: "bytes"
+
+        def __init__(
+            self,
+            *,
+            hash: "bytes",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["TxOutConfirmationNumber"]:
+            return isinstance(msg, cls)
+
+    class MobilecoinReducedTxOut(protobuf.MessageType):
+        public_key: "RistrettoPublic"
+        target_key: "RistrettoPublic"
+        commitment: "RistrettoPoint"
+
+        def __init__(
+            self,
+            *,
+            public_key: "RistrettoPublic",
+            target_key: "RistrettoPublic",
+            commitment: "RistrettoPoint",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["MobilecoinReducedTxOut"]:
+            return isinstance(msg, cls)
+
+    class MobilecoinInputSecret(protobuf.MessageType):
+        key: "RistrettoPrivate | None"
+        subaddress_index: "int | None"
+        amount: "int"
+        blinding: "RistrettoPoint"
+
+        def __init__(
+            self,
+            *,
+            amount: "int",
+            blinding: "RistrettoPoint",
+            key: "RistrettoPrivate | None" = None,
+            subaddress_index: "int | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: protobuf.MessageType) -> TypeGuard["MobilecoinInputSecret"]:
+            return isinstance(msg, cls)
+
     class MoneroTransactionSourceEntry(protobuf.MessageType):
         outputs: "list[MoneroOutputEntry]"
         real_output: "int | None"

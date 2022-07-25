@@ -193,8 +193,9 @@ def find_message_handler_module(msg_type: int) -> str:
             return "apps.binance.sign_tx"
 
     if utils.USE_MOBILECOIN:
-        # TODO(@ryankurte): mobilecoin
-        pass
+        # mobilecoin
+        if msg_type == MessageType.MobilecoinGetSubaddress:
+            return "apps.mobilecoin.get_address"
 
     raise ValueError
 
@@ -206,8 +207,16 @@ def find_registered_handler(iface: WireInterface, msg_type: int) -> Handler | No
 
     try:
         modname = find_message_handler_module(msg_type)
+        print("Using module: " + modname)
+
         handler_name = modname[modname.rfind(".") + 1 :]
+
+        print("Handler: " + handler_name)
+
         module = __import__(modname, None, None, (handler_name,), 0)
+        
+        print(dir(module))
+
         return getattr(module, handler_name)
     except ValueError:
         return None

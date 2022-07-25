@@ -89,7 +89,7 @@ def get_features() -> Features:
     if utils.USE_TEZOS:
         f.capabilities += [ Capability.Tezos ]
 
-    if utils.USE_U2F:
+    if utils.USE_WEBAUTHN:
         f.capabilities += [ Capability.U2F ]
 
 

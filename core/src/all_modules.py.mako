@@ -24,6 +24,7 @@ ALTCOINS = (
     "eos",
     "ethereum",
     "monero",
+    "mobilecoin",
     "nem",
     "ripple",
     "stellar",

@@ -1,8 +1,7 @@
 from common import *
 
 if utils.USE_MOBILECOIN:
-    #TODO: imports here
-    pass
+    from apps.mobilecoin import get_address
 
 
 @unittest.skipUnless(utils.USE_MOBILECOIN, "mobilecoin")

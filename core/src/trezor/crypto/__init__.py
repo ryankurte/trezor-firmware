@@ -11,5 +11,11 @@ from trezorcrypto import (  # noqa: F401
 
 from trezor import utils
 
-if not utils.BITCOIN_ONLY:
-    from trezorcrypto import cardano, monero, nem  # noqa: F401
+if utils.USE_CARDANO:
+    from trezorcrypto import cardano  # noqa: F401
+
+if utils.USE_MONERO:
+    from trezorcrypto import monero  # noqa: F401
+
+if utils.USE_NEM:
+    from trezorcrypto import nem  # noqa: F401

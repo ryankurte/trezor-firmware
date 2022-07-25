@@ -231,3 +231,5 @@ if not utils.BITCOIN_ONLY:
     WebAuthnCredentials = 801
     WebAuthnAddResidentCredential = 802
     WebAuthnRemoveResidentCredential = 803
+    MobilecoinGetSubaddress = 900
+    MobilecoinSubaddressKeys = 901

@@ -249,6 +249,8 @@ if TYPE_CHECKING:
         WebAuthnCredentials = 801
         WebAuthnAddResidentCredential = 802
         WebAuthnRemoveResidentCredential = 803
+        MobilecoinGetSubaddress = 900
+        MobilecoinSubaddressKeys = 901
 
     class FailureType(IntEnum):
         UnexpectedMessage = 1
